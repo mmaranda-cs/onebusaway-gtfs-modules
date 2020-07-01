@@ -18,10 +18,7 @@ package org.onebusaway.gtfs.serialization;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.onebusaway.csv_entities.CsvEntityContext;
 import org.onebusaway.csv_entities.CsvEntityReader;
@@ -169,9 +166,16 @@ public class GtfsReader extends CsvEntityReader {
       _log.info("reading entities: " + entityClass.getName());
 
       readEntities(entityClass, source);
-      _entityStore.flush();
-    }
 
+      _entityStore.flush();
+
+    }
+    _entityStore.getAllEntitiesForType(StopTime.class).forEach( st -> {
+              if (st.getStop() == null &&  st.getStartServiceArea() == null && st.getEndServiceArea() == null) {
+                throw new NoSuchElementException(st + " a stopTime in stop_times.txt cannot be missing stop_id and start_service_area_id and end_service_area_id");
+              }
+            }
+    );
     _entityStore.close();
   }
 
