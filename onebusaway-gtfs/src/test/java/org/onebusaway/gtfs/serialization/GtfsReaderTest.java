@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.junit.Test;
 import org.onebusaway.csv_entities.exceptions.CsvEntityIOException;
@@ -922,6 +923,13 @@ public class GtfsReaderTest {
     assertEquals("Ten, Ten", route.getLongName());
   }
 
+  @Test(expected = NoSuchElementException.class)
+  public void testStopTimesGtfs() throws NoSuchElementException, IOException {
+    /* load GTFS with an invalid stoptime to test for expected NoSuchElementException */
+    File resourcePath = GtfsTestData.getTestStopTimesGtfs();
+    String agencyId = "Caltrain";
+    GtfsDao entityStore = processFeed(resourcePath, agencyId, false);
+  }
   /****
    * Private Methods
    ****/
