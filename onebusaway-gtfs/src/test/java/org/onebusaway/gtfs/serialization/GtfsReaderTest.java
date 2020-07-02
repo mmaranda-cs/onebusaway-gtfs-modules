@@ -29,11 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.junit.Test;
 import org.onebusaway.csv_entities.exceptions.CsvEntityIOException;
@@ -54,66 +50,66 @@ public class GtfsReaderTest {
   @Test
   public void testAllFields() throws IOException {
     MockGtfs gtfs = MockGtfs.create();
-    gtfs.putLines("block.txt", 
-        "block_seq_num,block_var_num,block_route_num,block_run_num",
-        "4237385,1,599,1");
+    gtfs.putLines("block.txt",
+            "block_seq_num,block_var_num,block_route_num,block_run_num",
+            "4237385,1,599,1");
     gtfs.putLines(
-        "agency.txt",
-        "agency_id,agency_name,agency_url,agency_timezone,agency_lang,agency_phone,agency_fare_url",
-        "1,Agency,http://agency.gov/,America/Los_Angeles,en,555-1234,http://agency.gov/fares");
+            "agency.txt",
+            "agency_id,agency_name,agency_url,agency_timezone,agency_lang,agency_phone,agency_fare_url",
+            "1,Agency,http://agency.gov/,America/Los_Angeles,en,555-1234,http://agency.gov/fares");
     gtfs.putLines("levels.txt",
             "level_id,level_index,level_name",
             "L1,-1.3,Level One");
     gtfs.putLines(
-        "stops.txt",
-        "stop_id,stop_name,stop_lat,stop_lon,stop_desc,stop_code,stop_direction,location_type,parent_station,"
-            + "stop_url,wheelchair_boarding,zone_id,stop_timezone,vehicle_type,platform_code,level_id",
-        "S1,Stop,47.0,-122.0,description,123,N,1,1234,http://agency.gov/stop,1,Z,America/New_York,2,9 3/4,L1");
+            "stops.txt",
+            "stop_id,stop_name,stop_lat,stop_lon,stop_desc,stop_code,stop_direction,location_type,parent_station,"
+                    + "stop_url,wheelchair_boarding,zone_id,stop_timezone,vehicle_type,platform_code,level_id",
+            "S1,Stop,47.0,-122.0,description,123,N,1,1234,http://agency.gov/stop,1,Z,America/New_York,2,9 3/4,L1");
     gtfs.putLines(
-        "routes.txt",
-        "agency_id,route_id,route_short_name,route_long_name,route_type,route_desc,route_color,route_text_color,"
-            + "route_bikes_allowed,bikes_allowed,route_url,route_sort_order",
-        "1,R1,10,The Ten,3,route desc,FF0000,0000FF,1,2,http://agency.gov/route,100");
+            "routes.txt",
+            "agency_id,route_id,route_short_name,route_long_name,route_type,route_desc,route_color,route_text_color,"
+                    + "route_bikes_allowed,bikes_allowed,route_url,route_sort_order",
+            "1,R1,10,The Ten,3,route desc,FF0000,0000FF,1,2,http://agency.gov/route,100");
     gtfs.putLines(
-        "trips.txt",
-        "route_id,service_id,trip_id,trip_headsign,trip_short_name,direction_id,block_id,shape_id,route_short_name,"
-            + "trip_bikes_allowed,bikes_allowed,wheelchair_accessible,peak_offpeak",
-        "R1,WEEK,T1,head-sign,short-name,1,B1,SHP1,10X,1,2,1,3");
+            "trips.txt",
+            "route_id,service_id,trip_id,trip_headsign,trip_short_name,direction_id,block_id,shape_id,route_short_name,"
+                    + "trip_bikes_allowed,bikes_allowed,wheelchair_accessible,peak_offpeak",
+            "R1,WEEK,T1,head-sign,short-name,1,B1,SHP1,10X,1,2,1,3");
     gtfs.putLines(
-        "stop_times.txt",
-        "trip_id,arrival_time,departure_time,stop_id,stop_sequence,stop_headsign,pickup_type,drop_off_type,"
-            + "shape_dist_traveled,route_short_name,timepoint",
-        "T1,09:01:30,10:20:02,S1,2,head-sign,1,2,23.1,10X,1");
+            "stop_times.txt",
+            "trip_id,arrival_time,departure_time,stop_id,stop_sequence,stop_headsign,pickup_type,drop_off_type,"
+                    + "shape_dist_traveled,route_short_name,timepoint",
+            "T1,09:01:30,10:20:02,S1,2,head-sign,1,2,23.1,10X,1");
     gtfs.putLines(
-        "calendar.txt",
-        "service_id,start_date,end_date,monday,tuesday,wednesday,thursday,friday,saturday,sunday",
-        "WEEK,20120105,20120215,1,1,1,1,1,1,1");
+            "calendar.txt",
+            "service_id,start_date,end_date,monday,tuesday,wednesday,thursday,friday,saturday,sunday",
+            "WEEK,20120105,20120215,1,1,1,1,1,1,1");
     gtfs.putLines("calendar_dates.txt", "service_id,date,exception_type",
-        "WEEK,20120304,2");
+            "WEEK,20120304,2");
     gtfs.putLines(
-        "fare_attributes.txt",
-        "fare_id,price,currency_type,payment_method,transfers,transfer_duration,journey_duration",
-        "FA1,2.0,USD,1,2,60,61");
+            "fare_attributes.txt",
+            "fare_id,price,currency_type,payment_method,transfers,transfer_duration,journey_duration",
+            "FA1,2.0,USD,1,2,60,61");
     gtfs.putLines("fare_rules.txt",
-        "fare_id,route_id,origin_id,destination_id,contains_id",
-        "FA1,R1,Z1,Z2,Z3");
+            "fare_id,route_id,origin_id,destination_id,contains_id",
+            "FA1,R1,Z1,Z2,Z3");
     gtfs.putLines(
-        "shapes.txt",
-        "shape_id,shape_pt_sequence,shape_pt_lat,shape_pt_lon,shape_dist_traveled",
-        "SHP1,2,47.0,-122.0,123.4");
+            "shapes.txt",
+            "shape_id,shape_pt_sequence,shape_pt_lat,shape_pt_lon,shape_dist_traveled",
+            "SHP1,2,47.0,-122.0,123.4");
     gtfs.putLines("frequencies.txt",
-        "trip_id,start_time,end_time,headway_secs,exact_times,label_only",
-        "T1,09:01:30,10:20:02,300,1,1");
+            "trip_id,start_time,end_time,headway_secs,exact_times,label_only",
+            "T1,09:01:30,10:20:02,300,1,1");
     gtfs.putLines(
-        "transfers.txt",
-        "from_stop_id,from_route_id,from_trip_id,to_stop_id,to_route_id,to_trip_id,transfer_type,min_transfer_time",
-        "S1,R1,T1,S1,R1,T1,2,60");
+            "transfers.txt",
+            "from_stop_id,from_route_id,from_trip_id,to_stop_id,to_route_id,to_trip_id,transfer_type,min_transfer_time",
+            "S1,R1,T1,S1,R1,T1,2,60");
     gtfs.putLines(
-        "feed_info.txt",
-        "feed_publisher_name,feed_publisher_url,feed_lang,feed_start_date,feed_end_date,feed_version",
-        "Test,http://agency.gov/,en,20120110,20120217,2.0");
+            "feed_info.txt",
+            "feed_publisher_name,feed_publisher_url,feed_lang,feed_start_date,feed_end_date,feed_version",
+            "Test,http://agency.gov/,en,20120110,20120217,2.0");
     gtfs.putLines(
-        "pathways.txt",
+            "pathways.txt",
             "pathway_id,pathway_mode,is_bidirectional,from_stop_id,to_stop_id,traversal_time",
             "P1,1,1,S1,S1,60");
     gtfs.putLines(
@@ -165,7 +161,7 @@ public class GtfsReaderTest {
     assertEquals(new AgencyAndId("1", "L1"), level.getId());
     assertEquals(-1.3, level.getIndex(), 0.0);
     assertEquals("Level One", level.getName());
-    
+
     Stop stop = dao.getStopForId(new AgencyAndId("1", "S1"));
     assertEquals(new AgencyAndId("1", "S1"), stop.getId());
     assertEquals("Stop", stop.getName());
@@ -228,7 +224,7 @@ public class GtfsReaderTest {
     assertEquals(1, stopTime.getTimepoint());
 
     ServiceCalendar calendar = dao.getCalendarForServiceId(new AgencyAndId("1",
-        "WEEK"));
+            "WEEK"));
     assertEquals(new AgencyAndId("1", "WEEK"), calendar.getServiceId());
     assertEquals(new ServiceDate(2012, 01, 05), calendar.getStartDate());
     assertEquals(new ServiceDate(2012, 02, 15), calendar.getEndDate());
@@ -241,14 +237,14 @@ public class GtfsReaderTest {
     assertEquals(1, calendar.getSunday());
 
     List<ServiceCalendarDate> calendarDates = dao.getCalendarDatesForServiceId(new AgencyAndId(
-        "1", "WEEK"));
+            "1", "WEEK"));
     ServiceCalendarDate calendarDate = calendarDates.get(0);
     assertEquals(new AgencyAndId("1", "WEEK"), calendarDate.getServiceId());
     assertEquals(new ServiceDate(2012, 03, 04), calendarDate.getDate());
     assertEquals(2, calendarDate.getExceptionType());
 
     FareAttribute fareAttribute = dao.getFareAttributeForId(new AgencyAndId(
-        "1", "FA1"));
+            "1", "FA1"));
     assertEquals(new AgencyAndId("1", "FA1"), fareAttribute.getId());
     assertEquals(2.0, fareAttribute.getPrice(), 1.0);
     assertEquals("USD", fareAttribute.getCurrencyType());
@@ -266,7 +262,7 @@ public class GtfsReaderTest {
     assertEquals("Z3", fareRule.getContainsId());
 
     List<ShapePoint> shapePoints = dao.getShapePointsForShapeId(new AgencyAndId(
-        "1", "SHP1"));
+            "1", "SHP1"));
     ShapePoint shapePoint = shapePoints.get(0);
     assertEquals(new AgencyAndId("1", "SHP1"), shapePoint.getShapeId());
     assertEquals(2, shapePoint.getSequence());
@@ -320,7 +316,7 @@ public class GtfsReaderTest {
 
     String agencyId = "26";
     GtfsDao entityStore = processFeed(GtfsTestData.getIslandGtfs(), agencyId,
-        false);
+            false);
 
     Collection<Agency> agencies = entityStore.getAllAgencies();
     assertEquals(1, agencies.size());
@@ -383,9 +379,9 @@ public class GtfsReaderTest {
     assertEquals(1, transfers.size());
     Transfer transfer = transfers.iterator().next();
     assertEquals(new AgencyAndId(agencyId, "878"),
-        transfer.getFromStop().getId());
+            transfer.getFromStop().getId());
     assertEquals(new AgencyAndId(agencyId, "1167"),
-        transfer.getToStop().getId());
+            transfer.getToStop().getId());
     assertEquals(1, transfer.getTransferType());
     assertFalse(transfer.isMinTransferTimeSet());
   }
@@ -395,6 +391,7 @@ public class GtfsReaderTest {
 
     File resourcePath = GtfsTestData.getCaltrainGtfs();
     String agencyId = "Caltrain";
+
     GtfsDao entityStore = processFeed(resourcePath, agencyId, false);
 
     Collection<Agency> agencies = entityStore.getAllAgencies();
@@ -424,7 +421,7 @@ public class GtfsReaderTest {
     assertEquals("ff0000", routeBullet.getTextColor());
 
     Route routeLocal = entityStore.getRouteForId(new AgencyAndId(agencyId,
-        "ct_local"));
+            "ct_local"));
 
     Collection<Stop> stops = entityStore.getAllStops();
     assertEquals(31, stops.size());
@@ -471,12 +468,12 @@ public class GtfsReaderTest {
 
     StopTime stopTimeA = stopTimes.iterator().next();
     assertEquals(
-        entityStore.getTripForId(new AgencyAndId(agencyId, "10101272009")),
-        stopTimeA.getTrip());
+            entityStore.getTripForId(new AgencyAndId(agencyId, "10101272009")),
+            stopTimeA.getTrip());
     assertEquals(21120, stopTimeA.getArrivalTime());
     assertEquals(21120, stopTimeA.getDepartureTime());
     assertEquals(entityStore.getStopForId(new AgencyAndId(agencyId,
-        "22nd Street Caltrain")), stopTimeA.getStop());
+            "22nd Street Caltrain")), stopTimeA.getStop());
     assertEquals(21, stopTimeA.getStopSequence());
     assertNull(stopTimeA.getStopHeadsign());
     assertEquals(0, stopTimeA.getPickupType());
@@ -500,7 +497,7 @@ public class GtfsReaderTest {
     ServiceCalendar calendarA = entityStore.getCalendarForId(new Integer(1));
     assertEquals(new Integer(1), calendarA.getId());
     assertEquals(new AgencyAndId(agencyId, "SN01272009"),
-        calendarA.getServiceId());
+            calendarA.getServiceId());
     assertEquals(new ServiceDate(2009, 3, 2), calendarA.getStartDate());
     assertEquals(new ServiceDate(2019, 3, 2), calendarA.getEndDate());
     assertEquals(0, calendarA.getMonday());
@@ -535,7 +532,7 @@ public class GtfsReaderTest {
     assertEquals(36, fareRules.size());
 
     List<FareRule> fareRuleMatches = GtfsTestData.grep(fareRules, "fare",
-        fareAttribute);
+            fareAttribute);
     assertEquals(6, fareRuleMatches.size());
 
     fareRuleMatches = GtfsTestData.grep(fareRuleMatches, "originId", "1");
@@ -560,7 +557,7 @@ public class GtfsReaderTest {
     assertEquals(6, frequencies.size());
 
     List<Frequency> frequenciesForTrip = GtfsTestData.grep(frequencies,
-        "trip.id", new AgencyAndId("AirBART", "M-FSAT1DN"));
+            "trip.id", new AgencyAndId("AirBART", "M-FSAT1DN"));
     assertEquals(1, frequenciesForTrip.size());
     Frequency frequencyForTrip = frequenciesForTrip.get(0);
     assertEquals(18000, frequencyForTrip.getStartTime());
@@ -582,7 +579,7 @@ public class GtfsReaderTest {
 
     entityStore = processFeed(resourcePath, agencyId, true);
     Collection<Trip> trips = entityStore.getAllTrips();
-    for (Iterator<Trip> iter = trips.iterator(); iter.hasNext();) {
+    for (Iterator<Trip> iter = trips.iterator(); iter.hasNext(); ) {
       Trip t = iter.next();
       iter.remove();
       String s1 = t.getTripHeadsign();
@@ -619,7 +616,7 @@ public class GtfsReaderTest {
 
     String agencyId = "agency";
     GtfsRelationalDao dao = processFeed(GtfsTestData.getTestAgencyGtfs(),
-        agencyId, false);
+            agencyId, false);
 
     Agency agency = dao.getAgencyForId(agencyId);
     assertEquals(agencyId, agency.getId());
@@ -693,12 +690,12 @@ public class GtfsReaderTest {
 
   @Test
   public void testUtf8() throws IOException, ParseException,
-      InterruptedException {
+          InterruptedException {
 
     MockGtfs mockGtfs = MockGtfs.create();
     mockGtfs.putDefaultStopTimes();
     mockGtfs.putFile("routes.txt", new File(
-        "src/test/resources/org/onebusaway/gtfs/utf8-routes.txt"));
+            "src/test/resources/org/onebusaway/gtfs/utf8-routes.txt"));
 
     String agencyId = "1";
     GtfsDao dao = processFeed(mockGtfs.getPath(), agencyId, false);
@@ -712,12 +709,12 @@ public class GtfsReaderTest {
 
   @Test
   public void testBom() throws IOException, ParseException,
-      InterruptedException {
+          InterruptedException {
 
     MockGtfs mockGtfs = MockGtfs.create();
     mockGtfs.putDefaultStopTimes();
     mockGtfs.putFile("agency.txt", new File(
-        "src/test/resources/org/onebusaway/gtfs/bom-agency.txt"));
+            "src/test/resources/org/onebusaway/gtfs/bom-agency.txt"));
 
     GtfsDao dao = processFeed(mockGtfs.getPath(), "1", false);
 
@@ -763,7 +760,7 @@ public class GtfsReaderTest {
     reader.readEntities(Frequency.class, new StringReader(b.toString()));
 
     Frequency frequency = reader.getEntityStore().getEntityForId(
-        Frequency.class, 1);
+            Frequency.class, 1);
     assertEquals(30600, frequency.getStartTime());
     assertEquals(35100, frequency.getEndTime());
     assertEquals(1, frequency.getExactTimes());
@@ -783,7 +780,7 @@ public class GtfsReaderTest {
     reader.readEntities(FeedInfo.class, new StringReader(b.toString()));
 
     FeedInfo feedInfo = reader.getEntityStore().getEntityForId(FeedInfo.class,
-        "1");
+            "1");
     assertEquals("Test", feedInfo.getPublisherName());
     assertEquals("http://test/", feedInfo.getPublisherUrl());
     assertEquals("en", feedInfo.getLang());
@@ -918,8 +915,16 @@ public class GtfsReaderTest {
     b.append("        1,    R-10,              10,   \"Ten, Ten\",3\n");
     reader.readEntities(Route.class, new StringReader(b.toString()));
     Route route = reader.getEntityStore().getEntityForId(Route.class,
-        new AgencyAndId("1", "R-10"));
+            new AgencyAndId("1", "R-10"));
     assertEquals("Ten, Ten", route.getLongName());
+  }
+
+  @Test(expected = NoSuchElementException.class)
+  public void testStopTimesGtfs() throws NoSuchElementException, IOException {
+    /* load GTFS with an invalid stoptime to test for expected NoSuchElementException */
+    File resourcePath = GtfsTestData.getTestStopTimesGtfs();
+    String agencyId = "Caltrain";
+    GtfsDao entityStore = processFeed(resourcePath, agencyId, false);
   }
 
   /****
@@ -927,7 +932,7 @@ public class GtfsReaderTest {
    ****/
 
   private GtfsRelationalDao processFeed(File resourcePath, String agencyId,
-      boolean internStrings) throws IOException {
+                                        boolean internStrings) throws IOException {
 
     GtfsReader reader = new GtfsReader();
     reader.setDefaultAgencyId(agencyId);
@@ -944,10 +949,10 @@ public class GtfsReaderTest {
   }
 
   private ShapePoint getShapePoint(Iterable<ShapePoint> shapePoints,
-      AgencyAndId shapeId, int sequence) {
+                                   AgencyAndId shapeId, int sequence) {
     for (ShapePoint shapePoint : shapePoints) {
       if (shapePoint.getShapeId().equals(shapeId)
-          && shapePoint.getSequence() == sequence)
+              && shapePoint.getSequence() == sequence)
         return shapePoint;
     }
     return null;

@@ -35,6 +35,8 @@ public final class StopTime extends IdentityBean<Integer> implements
   @CsvField(name = "trip_id", mapping = EntityFieldMappingFactory.class)
   private Trip trip;
 
+  /* stop is now optional to accommodate gtfs-flex.
+  However, a valid gtfs-flex stopTime must have a stop, startServiceArea, or endServiceArea */
   @CsvField(optional = true, name = "stop_id", mapping = EntityFieldMappingFactory.class)
   private Stop stop = null;
 
