@@ -170,12 +170,7 @@ public class GtfsReader extends CsvEntityReader {
       _entityStore.flush();
 
     }
-    _entityStore.getAllEntitiesForType(StopTime.class).forEach( st -> {
-              if (st.getStop() == null &&  st.getStartServiceArea() == null && st.getEndServiceArea() == null) {
-                throw new NoSuchElementException(st + " a stopTime in stop_times.txt cannot be missing stop_id and start_service_area_id and end_service_area_id");
-              }
-            }
-    );
+    _entityStore.getAllEntitiesForType(StopTime.class).forEach( st -> {st.validateStopTime();});
     _entityStore.close();
   }
 

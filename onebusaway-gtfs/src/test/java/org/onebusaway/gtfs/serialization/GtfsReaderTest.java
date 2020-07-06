@@ -923,12 +923,15 @@ public class GtfsReaderTest {
     assertEquals("Ten, Ten", route.getLongName());
   }
 
-  @Test(expected = NoSuchElementException.class)
+  @Test
   public void testStopTimesGtfs() throws NoSuchElementException, IOException {
     /* load GTFS with an invalid stoptime to test for expected NoSuchElementException */
     File resourcePath = GtfsTestData.getTestStopTimesGtfs();
     String agencyId = "Caltrain";
-    GtfsDao entityStore = processFeed(resourcePath, agencyId, false);
+    try { GtfsDao entityStore = processFeed(resourcePath, agencyId, false);}
+    catch (NoSuchElementException e) {
+      assertTrue((e.toString().contains("seq=11")) && (e.toString().contains("trip=Caltrain_10101272009")));
+    }
   }
   /****
    * Private Methods
